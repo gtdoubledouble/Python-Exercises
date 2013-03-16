@@ -42,23 +42,26 @@ def cube( num ):
 	return num*num*num
 	
 def taxiCabNumber( N, max ):
-	# a,b,c,d has an upper limit of N^(1/3), save time
 	taxiNum = []
 	temp = []
-	for a in range( 1, max+1 ):
-		for b in range( 1, max+1 ):
-			for c in range( 1, max+1 ):
-				for d in range( 1, max+1 ):
+	# iterate through all possible permutations of a,b,c,d up to "max"
+	i = 1
+	delivered = 0
+	for a in range( i, max+1 ):
+	
+		for b in range( i, max+1 ):
+			for c in range( i, max+1 ):
+				for d in range( i, max+1 ):
 					temp = [a,b,c,d]
 					# check to see if a b c d are duplicates of each other (smart!)
 					if( len(temp) == len(set(temp)) ):
-						#print temp
 						if( cube(a) + cube(b) )<N:
 							if( cube(a)+cube(b) == cube(c)+cube(d) ):
-								taxiNum.append(cube(a)+cube(b))
-								print a, "^3 +", b, "^3 =", c, "^3 +", d, "^3 =", cube(a)+cube(b)
-						
-	
+								# only add taxi number into an array if there were no previous duplicate entries
+								# (since duplicated permutations were not accounted for, e.g. abcd = 1342 vs. 1234)
+								if (cube(a)+cube(b)) not in taxiNum: 
+									taxiNum.append(cube(a)+cube(b))
+									print a, "^3 +", b, "^3 =", c, "^3 +", d, "^3 =", cube(a)+cube(b)
 	return taxiNum
 	
 
@@ -71,18 +74,8 @@ max = int(round(pow(N,1/3.0)))
 print "Max =", max
 
 taxiNum = taxiCabNumber( N, max )
-result = []
-for i in taxiNum:
-	for j in taxiNum:
-		if j not in result:
-			result.append(j)
-	result.sort()
-
-for i in result:
-	if i > N:
-		result.remove(i)
-
-print result
+taxiNum.sort()
+print taxiNum
 
 timeAfter = millis()
 print "Runtime: ", timeAfter-timeBefore , "ms"
