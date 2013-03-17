@@ -28,7 +28,7 @@ def millis():
 def matchWord( word ):
 	for line in dictionary:
 		if ( line[0:-1].lower() ) == word.lower() : # convert user input to all lower case to check
-			return word.lower()
+			return 1
 	return 0
 	
 def changeVowel( word ):
@@ -50,33 +50,15 @@ def changeVowel( word ):
 						return word
 	return "No suggestions found"
 
-def removeDuplicates( word ):
-	# for repeated alphabets such as the word "sheeep", try removing one 'e', then two
-	
-	# note: the space bar is treated as an "i"
-	
-	# initialize alphabets
-	alphabets = "abcdefghijklmnopqrstuvwxyz"
-	repeatList = []
-	# 1. Convert to list
-	l = list(word)
-	# 2. Count instances of alphabets repeated more than once in the input word and append to an array called repeatList
-	# So "sheeep" would generate a repeatList array = ['e', 'e'] since there are 2 unncessary repetitions
-	for a_z in alphabets:
-		count = l.count(a_z)
-		for n in range(2, count+1):
-			repeatList.append(a_z)
-	#print repeatList
-	
-	# 3. Delete duplicated alphabets one by one while checking for matches
-	# So before 'sheeeeep' gets reduced to 'shep', we should find a match for 'sheep'
-	for i in repeatList:
-		# Match word
-		match = matchWord( word )
-		if( match != 0 ):
-			return match
-		word = word.replace(i,"",1)
-	return word
+def removeRepeats( word ):
+
+	repeats = [] #an array of repeated letters
+	temp = ""
+	for letter in word:
+		if( temp == letter ):
+			repeats.append(temp)
+		temp = letter	
+	return repeats
 
 def correctWord( word ):
 	# check to see if typed word was correct in the first place
@@ -84,11 +66,21 @@ def correctWord( word ):
 		return word
 	
 	# reduce duplicated alphabets (done first)
-	word = removeDuplicates( word )
+	repeats = removeRepeats( word )
+	print "Repeats: ", repeats
+	
+	temp = word # separate branch for repeated letter removing
+	for letter in repeats:
+		temp = temp.replace(letter,"",1)
+		print temp
+		dictionary.seek(0)
+		if( matchWord( temp ) ):
+			return temp
+	
 	# vowel correction (done second)
 	word = changeVowel( word ) 
 	
-	return (matchWord( word ))
+	return word.lower()
 	
 
 dictionary = open('wordlist.txt', 'r')
