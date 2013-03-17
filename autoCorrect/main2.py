@@ -41,23 +41,22 @@ def matchVowels( word, dictionary ):
 	matches = re.findall(wordToMatch, dictionary.read())
 	print "Matches are:",matches
 	
-	matchVowelCount = 0 # Make sure matched words have same amount of vowels as previously
-	
+	revisedMatches = [] # List for matching words that have the SAME number of vowels 
+	matchVowelCount = 0 # Initialize variable for counting vowels in each word of the matches list
 	for matchedWords in matches:
 		for letters in matchedWords:
 			if letters in 'aeiou':
 				matchVowelCount += 1
-		if matchVowelCount != vowelCount:
-			if( matches == [] or matches == None ):
-				return None
-			else:
-				matches = matches.remove(matchedWords) # possible index out of bounds error here, need to exit early if all suggestions dont have same vowel count
+				if matchVowelCount == vowelCount:
+					revisedMatches.append(matchedWords)
+		matchVowelCount = 0 # Make sure matched words have same amount of vowels as previously			
+		
 	print "Revised matches:", matches
 	
-	if matches == [] or matches == None:
+	if revisedMatches == [] or revisedMatches == None:
 		return None
 	else:
-		return matches[0]
+		return revisedMatches[0]
 
 def correctWord( word, dictionary ):
 
