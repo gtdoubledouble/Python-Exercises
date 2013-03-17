@@ -31,6 +31,7 @@ def matchVowels( word, dictionary ):
 	vowelCount = 0
 	
 	wordToMatch = word
+	print wordToMatch
 	for letters in word:
 		if letters in 'aeiou':
 			wordToMatch = wordToMatch.replace(letters, '.')
@@ -121,7 +122,7 @@ while True:
 		print word
 	# Otherwise, attempt to correct it
 	else:	
-		corrected = correctWord( word, dictionary )
+		corrected = correctWord( word.lower(), dictionary )
 		print "Corrected word is: ", corrected
 		timeAfter = millis()
 		timeRequired = timeAfter - timeBefore
