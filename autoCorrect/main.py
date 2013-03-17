@@ -52,13 +52,19 @@ def changeVowel( word ):
 
 def removeRepeats( word ):
 
-	repeats = [] #an array of repeated letters
-	temp = ""
-	for letter in word:
+	#repeats = [] # an array of repeated letters
+	indexOfRepeats = [] # an array of the index positions of the repeated letters
+	temp = "" # initialize this variable
+	index = 0 # keeps track of where the repeated letters are in the word
+	for letter in word: 
+		# place any consecutive letters into the "repeats" array
+		# the "temp" variable makes sure they're consecutive
 		if( temp == letter ):
-			repeats.append(temp)
+			#repeats.append(temp)
+			indexOfRepeats.append(index)
 		temp = letter	
-	return repeats
+		index += 1
+	return indexOfRepeats
 
 def correctWord( word ):
 	# check to see if typed word was correct in the first place
@@ -66,18 +72,21 @@ def correctWord( word ):
 		return word
 	
 	# reduce duplicated alphabets (done first)
-	repeats = removeRepeats( word )
-	print "Repeats: ", repeats
+	indexOfRepeats = removeRepeats( word )
+	print indexOfRepeats
 	
-	temp = word # separate branch for repeated letter removing
-	for letter in repeats:
-		temp = temp.replace(letter,"",1)
-		print temp
+	temp = list(word) # separate branch for repeated letter removing
+	# the list makes it easy to track the indices of repeated letters
+	count = 0 # this variable is used to prevent pop out of index error (see below)
+	for i in indexOfRepeats:
+		temp.pop(i-count) # everytime a letter is "popped" from the list, it will get shorter, so the original indexofRepeats need to be decremented
 		dictionary.seek(0)
-		if( matchWord( temp ) ):
-			return temp
+		tempWord = ''.join(temp) # convert back to string to check if word is correct
+		if( matchWord( tempWord ) ):
+			return tempWord # exit and return word if its correct
+		count += 1
 	
-	# vowel correction (done second)
+	# vowel correction 
 	word = changeVowel( word ) 
 	
 	return word.lower()
