@@ -25,25 +25,41 @@ import time as time_
 def millis():
     return int(round(time_.time() * 1000))
 
-def matchWord( word ):
-	for line in dictionary:
-		if ( line[0:-1].lower() ) == word.lower() : # convert user input to all lower case to check
-			return 1
-	return 0
-	
 def matchVowels( word, dictionary ):
-		
-	word = word.lower()
+	
+	# Count amount of vowels
+	vowelCount = 0
+	
 	for letters in word:
 		if letters in 'aeiou':
-			word = word.replace(letters, '.')
+			wordToMatch = word.replace(letters, '.')
+			vowelCount += 1
 	# now cunspericy becomes c nsp r cy
-	print word
+	print wordToMatch, "has", vowelCount, "vowels."
 	
-	matches = re.findall(word, dictionary.read())
-	print matches
+	dictionary.seek(0)
+	matches = re.findall(wordToMatch, dictionary.read())
+	print "Matches are:",matches
+	
+	matchVowelCount = 0 # Make sure matched words have same amount of vowels as previously
+	
+	for matchedWords in matches:
+		for letters in matchedWords:
+			if letters in 'aeiou':
+				matchVowelCount += 1
+		if matchVowelCount != vowelCount:
+			if( matches == [] or matches == None ):
+				return None
+			else:
+				matches = matches.remove(matchedWords) # possible index out of bounds error here, need to exit early if all suggestions dont have same vowel count
+	print "Revised matches:", matches
+	
+	if matches == [] or matches == None:
+		return None
+	else:
+		return matches[0]
 
-def removeRepeats( word ):
+def correctWord( word, dictionary ):
 
 	#repeats = [] # an array of repeated letters
 	indexOfRepeats = [] # an array of the index positions of the repeated letters
@@ -57,32 +73,28 @@ def removeRepeats( word ):
 			indexOfRepeats.append(index)
 		temp = letter	
 		index += 1
-	return indexOfRepeats
-
-def correctWord( word, dictionary ):
-	# 1. Check to see if typed word was correct in the first place
-	if( matchWord( word ) ):
-		return word
-	
-	# 2. Reduce duplicated letters )
-	indexOfRepeats = removeRepeats( word )
 	
 	temp = list(word) # separate branch for repeated letter removing
 	# the list makes it easy to track the indices of repeated letters
+	
 	count = 0 # this variable is used to prevent pop out of index error (see below)
+	
+	tempWord = word
+	wordNotMatched = "No suggestion"
+	
+	match = matchVowels( tempWord, dictionary )
+	if( match != None ):
+		return match # exit and return word if its correct
+	
 	for i in indexOfRepeats:
 		temp.pop(i-count) # everytime a letter is "popped" from the list, it will get shorter, so the original indexofRepeats need to be decremented
-		dictionary.seek(0)
 		tempWord = ''.join(temp) # convert back to string to check if word is correct
-		if( matchWord( tempWord ) ):
-			return tempWord # exit and return word if its correct
+		match = matchVowels( tempWord, dictionary )
+		if( match != None ):
+			return match # exit and return word if its correct
 		count += 1
-	print tempWord
-	# 3. Vowel correction 
-	matchVowels( word, dictionary ) 
 	
-	return word[0].lower()
-	
+	return wordNotMatched
 
 dictionary = open('wordlist.txt', 'r')
 
@@ -93,17 +105,26 @@ while True:
 	word = raw_input('> ')
 	
 	timeBefore = millis()
-		
-	corrected = correctWord( word, dictionary )
 	
-	print corrected
-				
-	timeAfter = millis()
-	timeRequired = timeAfter - timeBefore
+	# 1. Check to see if typed word was correct in the first place
+	dictionary.seek(0)	
 	
-	print "Autocorrection completed in", timeRequired, "ms."
+	match = 0
+	for line in dictionary:
+		if ( line[0:-1].lower() ) == word.lower() : # convert user input to all lower case to check
+			match = 1
+	print "Word not in dictionary, attempting to match..."
+	if( match == 1 ):
+		print word
+	# Otherwise, attempt to correct it
+	else:	
+		corrected = correctWord( word, dictionary )
+		print "Corrected word is: ", corrected
+		timeAfter = millis()
+		timeRequired = timeAfter - timeBefore
+		print "Time required:", timeRequired, "ms."
 	
-	dictionary.seek(0)
+	
 	
 	# Get search time for a word using O(n) vs. O(logn)
 	# Implement Hash Map/Table(?)

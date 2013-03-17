@@ -6,9 +6,7 @@ def matchWord( word ):
 			return 1
 	return 0
 	
-word = "sheeep"
-l = list(word)
-l.replace('e',"",1)
+word = raw_input('>')
 dictionary = open('wordlist.txt', 'r')
-match = matchWord( l )
+match = matchWord( word )
 print match
