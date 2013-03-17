@@ -30,15 +30,16 @@ def matchVowels( word, dictionary ):
 	# Count amount of vowels
 	vowelCount = 0
 	
+	wordToMatch = word
 	for letters in word:
 		if letters in 'aeiou':
-			wordToMatch = word.replace(letters, '.')
+			wordToMatch = wordToMatch.replace(letters, '.')
 			vowelCount += 1
 	# now cunspericy becomes c nsp r cy
 	print wordToMatch, "has", vowelCount, "vowels."
 	
 	dictionary.seek(0)
-	matches = re.findall(wordToMatch, dictionary.read())
+	matches = re.findall(wordToMatch+'\s', dictionary.read())
 	print "Matches are:",matches
 	
 	revisedMatches = [] # List for matching words that have the SAME number of vowels 
@@ -47,11 +48,14 @@ def matchVowels( word, dictionary ):
 		for letters in matchedWords:
 			if letters in 'aeiou':
 				matchVowelCount += 1
-				if matchVowelCount == vowelCount:
-					revisedMatches.append(matchedWords)
+				'''if matchVowelCount == vowelCount:
+					# Same vowels, but is the word an actual word, or just a segment of a longer word?
+					# e.g. jjoobbb -> jobb and gets matched to jabb, which is a segment of the word 'jabber'
+				'''	
+				revisedMatches.append(matchedWords)
 		matchVowelCount = 0 # Make sure matched words have same amount of vowels as previously			
 		
-	print "Revised matches:", matches
+	print "Revised matches:", revisedMatches
 	
 	if revisedMatches == [] or revisedMatches == None:
 		return None

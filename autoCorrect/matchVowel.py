@@ -7,21 +7,20 @@ def matchWord( word ):
 	return 0
 
 # search dictionary to see if there are any words with "c nsp r cy" pattern
-def matchVowels( word, dictionary):
+def matchVowels( word, dictionary ):
 	
-	word = word.lower()
-	for letters in word:
+	wordToMatch = word
+	for letters in wordToMatch:
 		if letters in 'aeiou':
-			word = word.replace(letters, '.')
+			wordToMatch = wordToMatch.replace(letters, '.')
 	# now cunspericy becomes c nsp r cy
-	print word
+	print wordToMatch
 	
-	#match = re.search(word, wordlist)
-	matches = re.findall(word, dictionary.read())
-	
-	print matches
+	dictionary.seek(0)
+	matches = re.findall(wordToMatch, dictionary.read())
+	print "MATCHES ARE......",matches
 	if matches == []:
-		return word
+		return None
 	else:
 		return matches[0]
 	
