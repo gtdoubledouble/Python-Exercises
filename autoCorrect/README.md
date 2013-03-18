@@ -31,3 +31,12 @@ What doesn't work:
 jjoobbb
 Proper nouns will print out as all lower case
 
+---
+
+Resources consulted:
+
+Peter Norvig's spell checker: http://norvig.com/spell-correct.html
+Regex: https://developers.google.com/edu/python/regular-expressions
+http://stackoverflow.com/questions/10017808/best-data-structure-for-dictionary-implementation
+- considered using tries: http://www.billdimmick.com/devjournal/using-a-trie-in-python.html
+- considered implementing BK tree: http://code.activestate.com/recipes/572156-bk-tree/
