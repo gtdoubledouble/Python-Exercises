@@ -145,7 +145,7 @@ if( choice == '1' ):
 		
 		print "Word to be matched: ", word[0:-1]
 		
-		dictionary.seek(0)
+		timeBefore = millis()
 		
 		match = 0
 		word = word[0:-1]
@@ -158,6 +158,7 @@ if( choice == '1' ):
 		else:	
 			corrected = correctWord( word.lower(), dictionary )
 			print "Corrected word is: ", corrected
+		print millis() - timeBefore, "ms."
 		
 # Choice to enter your own words
 else:
@@ -174,7 +175,7 @@ else:
 		for line in dictionary:
 			if ( line[0:-1].lower() ) == word.lower() : # convert user input to all lower case to check
 				match = 1
-		print "Word not in dictionary, attempting to match..."
+		
 		if( match == 1 ):
 			print word
 		# Otherwise, attempt to correct it

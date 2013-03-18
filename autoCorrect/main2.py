@@ -176,16 +176,16 @@ else:
 		for line in dictionary:
 			if ( line[0:-1].lower() ) == word.lower() : # convert user input to all lower case to check
 				match = 1
-		print "Word not in dictionary, attempting to match..."
+		
 		if( match == 1 ):
 			print word
 		# Otherwise, attempt to correct it
 		else:	
 			corrected = correctWord( word.lower(), dictionary )
 			print "Corrected word is: ", corrected
-			timeAfter = millis()
-			timeRequired = timeAfter - timeBefore
-			print "Time required:", timeRequired, "ms."
+		timeAfter = millis()
+		timeRequired = timeAfter - timeBefore
+		print "Time required:", timeRequired, "ms."
 	
 	
 	
