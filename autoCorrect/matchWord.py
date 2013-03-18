@@ -1,58 +1,37 @@
-''' this file is for testing purposes '''
-import time as time_
+import time
+import re
 
-def indexOfFirstAlphabet( index_az ):
-	indexNum = 0
-	alphabet = 'abcdefghijklmnopqrstuvwxyz'
-	for i in range(0,26):
-		if index_az == alphabet[i:i+1]:
-			return indexNum
-		indexNum += 1
+def millis():
+	return int(round(time.time() * 1000))
 
-def searchWord( word, index_i, index_f ):
-	for i in range(index_i, index_f):
-		if word == dictionary[i]:
-			print i
-			return 1
-	return 0
 	
-# Build hash table from the word list called 'dictionary'
-dictionary = {}
-i = 0
-with open('wordlist.txt', 'r') as wordlist:
-	for lines in wordlist:
-		dictionary[i]= lines[0:-1]
-		i += 1
-	
-	# Gather the index numbers of where each different alphabet in the dictionary starts
-	wordlist.seek(0)
-	wordIndex = {} 
-	a_z = []
-	alphabet = 'a'
-	a_z.append(0)
-	i = 0
-	for line in wordlist:
-		wordIndex[i] = line[0:-1].lower() 
-		if line[0:1].lower() != alphabet.lower():
-				a_z.append(i)
-				alphabet = line[0:1].lower()
-		i += 1
-	print a_z # a = 0-4, b = 5-11, c = 12 onwards
-#print dictionary
+def matchWord(dict, val):
+	try:
+		return [k for k, v in dictionary.iteritems() if v == val][0]
+	except IndexError:
+		return 0
 
-
-# if I pass in "changers", it should start looking in 12+ only
 word = raw_input('>')
-# extract first alphabet:
-index_az = (word.lower())[0]
-# get indices
-indexNum = indexOfFirstAlphabet( index_az )
-# print a_z[indexNum], a_z[indexNum+1] # prints out the lower and upper bound of indices in the dictionary to search from
-searchFrom = a_z[indexNum]
-if( index_az != 'z' ):
-	searchTo = a_z[indexNum+1]
-match = searchWord( word, searchFrom, searchTo ) 
-if match: print "Yes"
-else: print "no"
 
+wordList = open('wordlist.txt', 'r')
+words = [line.strip() for line in wordList]
+#for lines in words:
+dictionary = dict(zip(range(0,len(words)), words))
 
+before = millis()
+print matchWord(dictionary, word)
+print "Hash table search requires",millis()-before,"ms."
+
+before = millis()
+wordList.seek(0)
+for line in wordList:
+	if ( line[0:-1].lower() ) == word.lower() : # convert user input to all lower case to check
+		match = 1
+	else: match = 0
+print "Normal search requires",millis()-before,"ms."
+
+wordList.seek(0)
+before = millis()
+matches = re.findall(word, wordList.read())
+print matches
+print "Findall requires",millis()-before,"ms."
