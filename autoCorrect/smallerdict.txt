@@ -1,9 +1,0 @@
-keevin - done
-
-why does conspiracy not match?
-because its conspiracy\n!
-
-Always look at ur input and output:
-- the data type
-- lower case, upper case, delimiters, white space, new lines
-
