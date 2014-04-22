@@ -1,0 +1,17 @@
+CantoDict Parser
+================
+
+This script takes the wordlist from [CantoDict](http://www.cantonese.sheik.co.uk/scripts/wordlist.htm) and exports them into an Excel spreadsheet (.xlsx format).
+It will take around ~1 second for each page so you'll have to let the script run for quite a while, probably around an hour.
+
+To use this script, you'll need the following libraries: 
+Openpyxl - https://pypi.python.org/pypi/openpyxl/1.6.1
+BeautifulSoup - http://www.crummy.com/software/BeautifulSoup/#Download
+
+These can usually be installed with:
+pip install the_package_name
+
+Or use command line, cd into the extracted directory that has setup.py in it, then type:
+python setup.py install
+
+E-mail me if you have any questions.
