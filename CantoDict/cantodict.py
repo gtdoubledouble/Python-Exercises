@@ -65,9 +65,7 @@ for increment in range(0,3000): #there's currently around 2882 pages that are up
 		return tag.has_key('valign') and not tag.has_key('class')
 	
 	# show what page we're parsing/scraping
-	status = "Scraping page"
-	print status,
-	print str(increment), "...\r",
+	print "Working on page",increment
 	
 	word = soup.find_all("td",{"class":"wl_uni"})
 	jyutping = soup.find_all("span",{"listjyutping"}) 
@@ -75,6 +73,8 @@ for increment in range(0,3000): #there's currently around 2882 pages that are up
 	defn = soup.find_all(only_valign)
 	
 	parse()
+
+	wb.save('cantodict.xlsx')
 	
 # write all values to excel file
 wb.save('cantodict.xlsx')
